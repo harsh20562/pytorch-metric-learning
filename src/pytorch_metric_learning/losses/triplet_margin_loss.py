@@ -16,14 +16,7 @@ class TripletMarginLoss(BaseMetricLossFunction):
         smooth_loss: Use the log-exp version of the triplet loss
     """
 
-    def __init__(
-        self,
-        margin=0.05,
-        swap=False,
-        smooth_loss=False,
-        triplets_per_anchor="all",
-        **kwargs
-    ):
+    def __init__(self, margin=0.05, swap=False, smooth_loss=False, triplets_per_anchor="all", **kwargs):
         super().__init__(**kwargs)
         self.margin = margin
         self.swap = swap
@@ -39,7 +32,7 @@ class TripletMarginLoss(BaseMetricLossFunction):
         anchor_idx, positive_idx, negative_idx = indices_tuple
         if len(anchor_idx) == 0:
             return self.zero_losses()
-        mat = self.distance(embeddings, ref_emb)
+        mat = self.distance(embeddings, ref_emb) # By default it is L-p distance with p = 2
         ap_dists = mat[anchor_idx, positive_idx]
         an_dists = mat[anchor_idx, negative_idx]
         if self.swap:
