@@ -4,6 +4,7 @@ from ..reducers import AvgNonZeroReducer
 from ..utils import common_functions as c_f
 from ..utils import loss_and_miner_utils as lmu
 from .base_metric_loss_function import BaseMetricLossFunction
+from ..distances.lp_distance import LpDistance
 
 
 class TripletMarginLoss(BaseMetricLossFunction):
@@ -32,9 +33,11 @@ class TripletMarginLoss(BaseMetricLossFunction):
         anchor_idx, positive_idx, negative_idx = indices_tuple
         if len(anchor_idx) == 0:
             return self.zero_losses()
-        mat = self.distance(embeddings, ref_emb) # By default it is L-p distance with p = 2
-        ap_dists = mat[anchor_idx, positive_idx]
-        an_dists = mat[anchor_idx, negative_idx]
+        mat = self.distance(embeddings, ref_emb) # Size of mat - batch-size x batch-size in case of cosine similarity.
+        dist2 = LpDistance()
+        mat2 = dist2.compute_mat(embeddings, ref_emb)
+        ap_dists = (mat[anchor_idx, positive_idx] + 2)/(mat2[anchor_idx, positive_idx] + 1)
+        an_dists = (mat[anchor_idx, negative_idx] + 2)/(mat2[anchor_idx, positive_idx] + 1)
         if self.swap:
             pn_dists = mat[positive_idx, negative_idx]
             an_dists = self.distance.smallest_dist(an_dists, pn_dists)

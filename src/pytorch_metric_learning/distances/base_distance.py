@@ -5,7 +5,7 @@ from ..utils.module_with_records import ModuleWithRecords
 
 class BaseDistance(ModuleWithRecords):
     def __init__(
-        self, normalize_embeddings=True, p=2, power=1, is_inverted=False, **kwargs
+        self, normalize_embeddings=False, p=2, power=1, is_inverted=False, **kwargs
     ):
         super().__init__(**kwargs)
         self.normalize_embeddings = normalize_embeddings
