@@ -36,8 +36,8 @@ class TripletMarginLoss(BaseMetricLossFunction):
         mat = self.distance(embeddings, ref_emb) # Size of mat - batch-size x batch-size in case of cosine similarity.
         dist2 = LpDistance()
         mat2 = dist2.compute_mat(embeddings, ref_emb)
-        ap_dists = (mat[anchor_idx, positive_idx] + 2)/(mat2[anchor_idx, positive_idx] + 1)
-        an_dists = (mat[anchor_idx, negative_idx] + 2)/(mat2[anchor_idx, positive_idx] + 1)
+        ap_dists = (mat[anchor_idx, positive_idx] + 2)/(mat2[anchor_idx, positive_idx]**(0.01) + 1)
+        an_dists = (mat[anchor_idx, negative_idx] + 2)/(mat2[anchor_idx, positive_idx]**(0.01) + 1)
         if self.swap:
             pn_dists = mat[positive_idx, negative_idx]
             an_dists = self.distance.smallest_dist(an_dists, pn_dists)

@@ -97,7 +97,7 @@ test_loader = torch.utils.data.DataLoader(dataset2, batch_size=batch_size)
 
 model = Net().to(device)
 optimizer = optim.Adam(model.parameters(), lr=0.01)
-num_epochs = 1
+num_epochs = 2
 
 
 ### pytorch-metric-learning stuff ###
